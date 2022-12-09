@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avance 2 - Proyecto IA</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+		<!-- Bootstrap -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet" >
+    
+    <!-- Template Main CSS File -->
+    <!-- <link href="public/assets/css/style.css" rel="stylesheet"> -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='public/assets/css/style.css') }}">
+  </head>
+
+  <body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+      <div class="container d-flex align-items-center justify-content-between">
+      <h1 class="logo"><a href="\">Logo</a></h1>
+			<nav id="navbar" class="navbar">
+        <ul>
+					<li><a class="nav-link scrollto active" href="#hero">Inicio</a></li>
+					<li><a class="nav-link scrollto" href="#about">Acerca</a></li>
+					<li><a class="nav-link scrollto" href="#contact">Contacto</a></li>
+        </ul>
+				<i class="bi bi-list mobile-nav-toggle"></i>
+			</nav>
+      </div>
+		</header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+		<section id="hero" class="d-flex align-items-center">
+			<div class="container position-relative">
+				<div class="row justify-content-center">
+					<div class="col-xl-7 col-lg-9 text-center">
+						<h1>Versión: Avance 2</h1>
+					</div>
+				</div>
+
+				<div class="row icon-boxes">
+					<div class="col-md-6 col-lg d-flex align-items-stretch mb-5 mb-lg-0">
+						<div class="icon-box">
+							<a href="#Algoritmo1">
+							<img src= "https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/Algoritmo/Algoritmo1.png?raw=true" class="img-fluid" alt="">
+							<h4 class="title">Apriori</h4>
+							<p class="description">Breve descripción</p>
+							</a>
+						</div>
+					</div>
+
+					<div class="col-md-6 col-lg d-flex align-items-stretch mb-5 mb-lg-0">
+						<div class="icon-box">
+							<a href="#Algoritmo2">
+							<img src="https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/Algoritmo/Algoritmo2.png?raw=true" class="img-fluid" alt="">
+							<h4 class="title">Distancias</h4>
+							<p class="description">Breve descripción</p>
+							</a>
+						</div>
+					</div>
+
+					<div class="col-md-6 col-lg d-flex align-items-stretch mb-5 mb-lg-0">
+						<div class="icon-box">
+							<a href="#Algoritmo3">
+							<img src="https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/Algoritmo/Algoritmo1.png?raw=true" class="img-fluid" alt="">
+							<h4 class="title">Clustering</h4>
+							<p class="description">Breve descripción</p>
+							</a>
+						</div>
+					</div>
+
+					<div class="col-md-6 col-lg d-flex align-items-stretch mb-5 mb-lg-0">
+						<div class="icon-box">
+							<a href="#Algoritmo4">
+							<img src="https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/Algoritmo/Algoritmo2.png?raw=true" class="img-fluid" alt="">
+							<h4 class="title">Pronosticos</h4>
+							<p class="description">Breve descripción</p>
+							</a>
+						</div>
+					</div>
+
+					<div class="col-md-6 col-lg d-flex align-items-stretch mb-5 mb-lg-0">
+						<div class="icon-box">
+							<a href="#Algoritmo5">
+							<img src="https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/Algoritmo/Algoritmo1.png?raw=true" class="img-fluid" alt="">
+							<h4 class="title">Clasificación</h4>
+							<p class="description">Breve descripción</p>
+							</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section><!-- Fin Hero -->
+
+	<!-- ======= Main ======= -->
+	<main id="main">
+
+		<!-- ======= Algoritmo1  ======= -->
+		<section id="Algoritmo1" class="Algoritmo">
+			<div class="container">
+				<div class="section-title">
+					<h2>Apriori</h2>
+				</div>
+
+				<div class="row">
+          <div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<br>
+							<img src="https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/Algoritmo/Algoritmo1.png?raw=true" class="img-fluid" alt="">
+							<br><p>Breve descripción.</p>
+							<br><br><br>
+						</div>
+          </div>
+
+					<div class="col-lg-4 pt-3 pt-lg-0 content">
+						<h3>Insertar datos</h3>
+								<!-- Main Input For Receiving Query to our ML -->
+								<form action="{{ url_for('predictApriori')}}"method="post">
+									<input type="text" name="min_soporte" placeholder="Soporte minimo" required="required" />
+									<input type="text" name="min_confianza" placeholder="Confianza minima" required="required" />
+									<input type="text" name="mini_lift" placeholder="Lift minimo" required="required" />
+									<div class="d-grid gap-2 col-6 mx-auto">
+										<div class="btn-wrap">
+											<button type="submit" class="btn">Predict</button>
+										</div>
+									</div>
+								</form>
+					</div>
+
+					<div class="col-lg-4 pt-3 pt-lg-0 content">
+						<h3>Reglas generadas</h3>
+						{% for cadena in ReglasApriori %}
+						<h4>{{ cadena }}</h4>
+						{% endfor %}
+						<div class="box">
+							<img src="static/public/assets/img/apriori.png" class="img-fluid" alt="">
+							<p>Distribución de los datos.</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+		<!-- ======= Algoritmo 2  ======= -->
+		<section id="Algoritmo2" class="Algoritmo section-bg">
+			<div class="container">
+				<div class="section-title">
+					<h2>Distancias</h2>
+				</div>
+
+				<div class="row">
+          <div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<img src="https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/Algoritmo/Algoritmo2.png?raw=true" class="img-fluid" alt="">
+							<p>
+								Breve descripción.
+							</p>
+						</div>
+          </div>
+
+					<div class="col-lg-4 pt-3 pt-lg-0 content">
+						<h3> Objetos a comparar </h3>
+						<p> Objeto 1</p>
+						<form action="{{ url_for('predictDistancias')}}"method="post">
+							<select class="form-select" aria-label="Default select example" id="objeto1" name="'objeto1" required>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+							<br>
+							<p> Objeto 2</p>
+							<select class="form-select" aria-label="Default select example" id="objeto2" name="'objeto2" required>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+								<div class="d-grid gap-2 col-6 mx-auto">
+									<div class="btn-wrap">
+										<button type="submit" class="btn">Predict</button>
+									</div>
+								</div>
+						</form>
+					</div>
+	
+					<div class="col-lg-4 pt-3 pt-lg-0 content" id = Distancias>
+						<h3>Resultados</h3>
+						{% for cadena in Distancias %}
+						<h4>{{ cadena }}</h4>
+						{% endfor %}
+						<div class="box">
+							<img src="static/public/assets/img/mapaCalorDistancias.png" class="img-fluid" alt="">
+							<p>Mapa de calor.</p>
+						</div>
+					</div>
+
+				</div>
+				</div>
+		</section>
+
+		<!-- ======= Algoritmo 3  ======= -->
+		<section id="Algoritmo3" class="Algoritmo ">
+			<div class="container">
+				<div class="section-title">
+					<h2>Clustering</h2>
+				</div>
+
+				<div class="row">
+          <div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<img src="https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/Algoritmo/Algoritmo1.png?raw=true" class="img-fluid" alt="">
+							<p>
+								Breve descripción.
+							</p>
+						</div>
+          </div>
+
+					<div class="col-lg-4 pt-3 pt-lg-0 content">
+						<h3> Método a utilizar:</h3>
+						<form method="post">
+							<select class="form-select" aria-label="Default select example" id="metodo" name="metodo" required>
+								<option value="euclidean">Euclidiano</option>
+								<option value="chebyshev">Chebyshev</option>
+								<option value="cityblock">Manhattan</option>
+								<option value="minkowski">Minkowski</option>
+							</select>
+					</div>
+
+					<div class="col-lg-4 pt-3 pt-lg-0 content">
+						<h3>Jerarquico</h3>
+							<!-- Input -->
+							<div class="d-grid gap-2 col-6 mx-auto">
+								<div class="btn-wrap">
+									<button formaction="{{ url_for('predictJerarquico')}}" type="submit" class="btn">Predict</button>
+								</div>
+							</div>
+						<br>
+						<br>
+							<h3>Particional</h3>
+							<div class="d-grid gap-2 col-6 mx-auto">
+								<div class="btn-wrap">
+									<button formaction="{{ url_for('predictParticional')}}" type="submit" class="btn">Predict</button>
+								</div>
+							</div>
+					</form>
+					</div>
+
+				</div>
+
+				<div class="row">
+					<h3>Resultados Jerarquico</h3>				
+					<div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<img src="static/public/assets/img/mapaCalorClustering.png" class="img-fluid" alt="">
+							<p>Mapa de calor.</p>
+						</div>
+          </div>
+
+					<div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<img src="static/public/assets/img/ArbolJerarquicoClustering.png" class="img-fluid" alt="">
+							<p>Árbol.</p>
+						</div>
+          </div>
+
+					<div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<img src="static/public/assets/img/DispesionJerarquicoClustering.png" class="img-fluid" alt="">
+							<p>Dispersión de datos.</p>
+						</div>
+          </div>
+				</div>
+
+				<div class="row">
+					<h3>Resultados Particional</h3>
+					<div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<img src="static/public/assets/img/ElbowMethodClustering.png" class="img-fluid" alt="">
+							<p>Gráfica 'codo'.</p>
+						</div>
+          </div>
+
+					<div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<img src="static/public/assets/img/KneePlot.png" class="img-fluid" alt="">
+							<p>'Codo/Knee'.</p>
+						</div>
+          </div>
+
+					<div class="col-lg-4 col-md-6" >
+						<div class="box">
+							<img src="static/public/assets/img/Dispersion3DParticional.png" class="img-fluid" alt="">
+							<p>Dispersión de datos.</p>
+						</div>
+          </div>
+				</div>
+
+
+			</div>
+		</section>
+		<!-- ======= Algoritmo 4  ======= -->
+
+		<!-- ======= Algoritmo 5  ======= -->
+
+		<!-- ======= Acerca de  ======= -->
+		<section id="about" class="about section-bg">
+			<div class="container">
+				<div class="section-title">
+					<h2>Acerca de </h2>
+					<p>Versión Beta 8 diciembre 2022. </p>
+				</div>
+
+				<div class="row content">
+						<p> Avance #2 del proyecto web para la materia Inteligencia Artificial. </p>
+						<p>
+							Se presenta la interfaz de página web junto con la integración en formato
+							API rest de los algoritmos utilizados en clase.
+						</p>
+				</div>
+
+			</div>
+		</section><!-- Fin Acerca de -->
+
+		<!-- ======= Contacto ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <div class="section-title">
+          <h2>Contacto</h2>
+        </div>
+
+				<div class="col-lg-4">
+					<div class="info">
+						<div class="email">
+							<i class="bi bi-envelope"></i>
+							<h4>Email:</h4>
+							<p>pamela.castillo.montes@gmail.com</p>
+						</div>
+					</div>
+				</div>
+      </div>
+
+    </section><!-- Fin Contacto  -->
+
+  </main><!-- Fin #main -->
+
+		<!-- ======= Pie de página ======= -->
+	<footer id="footer">
+    <div class="me-md-auto text-center text-md-center">
+      &copy; Copyright <strong><span>:D</span></strong> Uso Educativo
+			<div class="credits">
+				Designed by Castillo Montes Pamela
+			</div>
+    </div>
+  </footer><!-- Fin Pie de Página -->
+
+	<!-- Indicador de carga -->
+	<div id="preloader"></div>
+
+	<!-- Regresar arriba -->
+	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+	<!-- BootStrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+  <!-- Main JS  -->
+	<script src="static/public/assets/js/main.js"></script>
+
+  </body>
+</html>

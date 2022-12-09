@@ -1,0 +1,16 @@
+{
+  "name": "proyecto_ia",
+  "version": "0.0.1",
+  "description": "Node para el proyecto de ia",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "colpim2",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "express": "^4.18.2"
+  }
+}
