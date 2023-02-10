@@ -240,6 +240,255 @@ def predictParticional():
 
     return render_template('Landing.html',metodoout=metodo)
 
+@app.route('/predictLogistica',methods=['POST'])
+def predictLogistica():
+    #Convierte a int y float los valores obtenidos
+    embarazos = int(list(request.form.values())[0])
+    glucosa = int(list(request.form.values())[1])
+    presionArterial = int(list(request.form.values())[2])
+    espesorPliegue = int(list(request.form.values())[3])
+    insulina = int(list(request.form.values())[4])
+    indiceMasaCorporal = float(list(request.form.values())[5])
+    funcionPedigriDiabetes = float(list(request.form.values())[6])
+    edad = int(list(request.form.values())[7])
+
+    import pandas as pd               
+    import numpy as np                
+    import matplotlib.pyplot as plt   
+    import seaborn as sns             # Para la visualización de datos basado en matplotlib
+
+    Diabetes = pd.read_csv('Datos/Diabetes.csv')
+
+    #Agrupación
+    plt.figure(figsize=(10, 7))
+    plt.scatter(Diabetes['BloodPressure'], Diabetes['Glucose'], c = Diabetes.Outcome)
+    plt.grid()
+    plt.xlabel('BloodPressure')
+    plt.ylabel('Glucose')
+    plt.title('Agrupamiento por Diagnostico')
+    plt.savefig('static/public/assets/img/AgrupamientoLogistico.png', format='png', bbox_inches='tight')
+
+    #Mapa de Calor
+    plt.figure(figsize=(14,7))
+    MatrizInf = np.triu(Diabetes.corr())
+    sns.heatmap(Diabetes.corr(), cmap='RdBu_r', annot=True, mask=MatrizInf)
+    plt.savefig('static/public/assets/img/mapaCalorLogistico.png', format='png', bbox_inches='tight')
+
+    #Variables predictoras
+    X = np.array(Diabetes[['Pregnancies', 
+                        'Glucose', 
+                        'BloodPressure', 
+                        'SkinThickness', 
+                        'Insulin', 
+                        'BMI',
+                        'DiabetesPedigreeFunction',
+                        'Age']])
+    #Variable clase
+    Y = np.array(Diabetes[['Outcome']])
+
+    #Importar bibliotecas para la creación de modelo
+    from sklearn import model_selection
+    from sklearn import linear_model
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import classification_report
+    from sklearn.metrics import accuracy_score
+    
+    #Entrenamiento del Modelo
+    X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y, 
+                                                                                test_size = 0.2, 
+                                                                                random_state = 0,
+                                                                                shuffle = True)
+
+    ClasificacionRL = linear_model.LogisticRegression()
+    ClasificacionRL.fit(X_train, Y_train)
+
+    #Clasificación final 
+    Y_ClasificacionRL = ClasificacionRL.predict(X_validation)
+
+    #Matriz de clasificación
+    ModeloClasificacion = ClasificacionRL.predict(X_validation)
+    Matriz_Clasificacion = pd.crosstab(Y_validation.ravel(), 
+                                    ModeloClasificacion, 
+                                    rownames=['Reales'], 
+                                    colnames=['Clasificación']) 
+
+    #Curva ROC
+    from sklearn.metrics import RocCurveDisplay
+    CurvaROC = RocCurveDisplay.from_estimator(ClasificacionRL, X_validation, Y_validation, name="Diabetes")
+    plt.savefig('static/public/assets/img/curvaROCLogistico.png', format='png', bbox_inches='tight')
+
+    #Paciente
+    PacienteID = pd.DataFrame({'Pregnancies': [embarazos],
+                        'Glucose': [glucosa],
+                        'BloodPressure': [presionArterial],
+                        'SkinThickness': [espesorPliegue],
+                        'Insulin': [insulina],
+                        'BMI': [indiceMasaCorporal],
+                        'DiabetesPedigreeFunction': [funcionPedigriDiabetes],
+                        'Age': [edad]})
+
+    #Reporte
+    Reporte = []
+    if ClasificacionRL.predict(PacienteID) == 1:
+        Reporte.insert(1,"Diabetetico")
+    else:
+        Reporte.insert(1,"No Diabetetico")
+    Reporte.insert(2,"Exactitud: "+ str(accuracy_score(Y_validation, Y_ClasificacionRL)*100)+'%')
+
+    return render_template('Landing.html', ReporteLogistico = Reporte)
+
+@app.route('/predictADyBA',methods=['POST'])
+def predictADyBA():
+    #Obtener nombre de ticket acción y valores de pronostico
+    accion = str(list(request.form.values())[0])
+    valorAbierto = float(list(request.form.values())[1])
+    valorAlto = float(list(request.form.values())[2])
+    valorBajo = float(list(request.form.values())[3])
+
+    import pandas as pd               
+    import numpy as np                
+    import matplotlib.pyplot as plt   
+    import seaborn as sns             
+    import yfinance as yf
+
+    #Importar información
+    DataAccion = yf.Ticker(accion)
+    AccionHist = DataAccion.history(start = '2019-1-1', end = '2022-12-31', interval='1d')
+
+    plt.figure(figsize=(20, 5))
+    plt.plot(AccionHist['Open'], color='purple', marker='+', label='Open')
+    plt.plot(AccionHist['High'], color='blue', marker='+', label='High')
+    plt.plot(AccionHist['Low'], color='orange', marker='+', label='Low')
+    plt.plot(AccionHist['Close'], color='green', marker='+', label='Close')
+    plt.xlabel('Fecha')
+    plt.ylabel('Precio de las acciones')
+    plt.title(accion)
+    plt.grid(True)
+    plt.legend()
+    plt.savefig('static/public/assets/img/accionesAD.png', format='png', bbox_inches='tight')
+
+    MDatos = AccionHist.drop(columns = ['Volume', 'Dividends', 'Stock Splits'])
+    # En caso de tener valores nulos
+    MDatos = MDatos.dropna()
+
+    # ========================== Árbol de Decisión =======================
+    from sklearn import model_selection
+    from sklearn.tree import DecisionTreeRegressor
+    from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+    #Variables predictoras
+    X = np.array(MDatos[['Open',
+                        'High',
+                        'Low']])
+    #Variables a pronosticar
+    Y = np.array(MDatos[['Close']])
+
+    #División de datos
+    X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, 
+                                                                    test_size = 0.2, 
+                                                                    random_state = 0, 
+                                                                    shuffle = True)
+
+    #Entrenamiento e modelo
+    PronosticoAD = DecisionTreeRegressor(max_depth=9, min_samples_split=8, min_samples_leaf=4, random_state=0)
+    PronosticoAD.fit(X_train, Y_train)
+
+    #Se genera el pronóstico
+    Y_Pronostico = PronosticoAD.predict(X_test)
+    Valores = pd.DataFrame(Y_test, Y_Pronostico)
+
+    #Modelo
+    plt.figure(figsize=(20, 5))
+    plt.plot(Y_test, color='red', marker='+', label='Real')
+    plt.plot(Y_Pronostico, color='green', marker='+', label='Estimado')
+    plt.xlabel('Fecha')
+    plt.ylabel('Precio de las acciones')
+    plt.title('Pronóstico de las acciones')
+    plt.grid(True)
+    plt.legend()
+    plt.savefig('static/public/assets/img/modeloAD.png', format='png', bbox_inches='tight')
+
+    #Generación del árbol
+    from sklearn.tree import plot_tree
+    plt.figure(figsize=(16,16))  
+    plot_tree(PronosticoAD, feature_names = ['Open', 'High', 'Low'])
+    plt.savefig('static/public/assets/img/AD.png', format='png', bbox_inches='tight')
+
+    #Objeto acción AD
+    PrecioAccionAD = pd.DataFrame({'Open': [valorAbierto],
+                            'High': [valorAlto], 
+                            'Low': [valorBajo]})
+
+    #Reporte Árbol de Decisión
+    Reporte = []
+    Reporte.insert(1,'Pronostico valor: '+str(PronosticoAD.predict(PrecioAccionAD)))   
+    Reporte.insert(2,'Criterio: ' +str(PronosticoAD.criterion))
+    Reporte.insert(3,'Importancia variables: '+str(PronosticoAD.feature_importances_))
+    Reporte.insert(4,"MAE: "+str(mean_absolute_error(Y_test, Y_Pronostico)))
+    Reporte.insert(5,"MSE: "+str(mean_squared_error(Y_test, Y_Pronostico)))
+    Reporte.insert(6,"RMSE: "+str(mean_squared_error(Y_test, Y_Pronostico, squared=False)))
+    Reporte.insert(7,'Score: '+str(r2_score(Y_test, Y_Pronostico)))
+
+    # ========================== Bosque Aletorio =======================
+    from sklearn import model_selection
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+    #Variables predictorias
+    X2 = np.array(MDatos[['Open',
+                        'High',
+                        'Low']])
+    #Variables a pronosticar
+    Y2 = np.array(MDatos[['Close']])
+
+    #División de datos
+    X2_train, X2_test, Y2_train, Y2_test = model_selection.train_test_split(X2, Y2, 
+                                                                    test_size = 0.2, 
+                                                                    random_state = 0, 
+                                                                    shuffle = True)
+
+    #Entrenar modelo
+    PronosticoBA = RandomForestRegressor(n_estimators=105, max_depth=8, min_samples_split=8, min_samples_leaf=4, random_state=0)
+    PronosticoBA.fit(X2_train, Y2_train)
+    Y2_Pronostico = PronosticoBA.predict(X2_test)
+    Valores2 = pd.DataFrame(Y2_test, Y2_Pronostico)
+
+    #Modelo
+    plt.figure(figsize=(20, 5))
+    plt.plot(Y2_test, color='red', marker='+', label='Real')
+    plt.plot(Y2_Pronostico, color='green', marker='+', label='Estimado')
+    plt.xlabel('Fecha')
+    plt.ylabel('Precio de las acciones')
+    plt.title('Pronóstico de las acciones de Amazon')
+    plt.grid(True)
+    plt.legend()
+    plt.savefig('static/public/assets/img/modeloBA.png', format='png', bbox_inches='tight')
+
+    #Generaición de bosque
+    Estimador = PronosticoBA.estimators_[50]
+    from sklearn.tree import plot_tree
+    plt.figure(figsize=(16,16))  
+    plot_tree(Estimador, 
+            feature_names = ['Open', 'High', 'Low'])
+    plt.savefig('static/public/assets/img/BA.png', format='png', bbox_inches='tight')
+
+    #Objeto pronostico
+    PrecioAccionBA = pd.DataFrame({'Open': [valorAbierto],
+                            'High': [valorAlto], 
+                            'Low': [valorBajo]})
+
+    #Reporte 
+    Reporte2 = []
+    Reporte2.insert(1,'Pronostico valor (Bosque Aleatorio): '+str(PronosticoBA.predict(PrecioAccionBA)))
+    Reporte2.insert(2,'Criterio:' + str(PronosticoBA.criterion))
+    Reporte2.insert(3,'Importancia variables: ' + str(PronosticoBA.feature_importances_))
+    Reporte2.insert(4,"MAE: " +str(mean_absolute_error(Y2_test, Y2_Pronostico)))
+    Reporte2.insert(5,"MSE: " +str(mean_squared_error(Y2_test, Y2_Pronostico)))
+    Reporte2.insert(6,"RMSE: " +str(mean_squared_error(Y2_test, Y2_Pronostico, squared=False)))
+    Reporte2.insert(7,'Score: ' +str(r2_score(Y2_test, Y2_Pronostico)))
+
+    return render_template('Landing.html', ReporteAD = Reporte, ReporteBA = Reporte2)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

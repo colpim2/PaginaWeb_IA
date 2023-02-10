@@ -384,7 +384,7 @@ h4{
   width: 100%;
   height: 100vh;
   position: relative;
-  background: url("https://github.com/colpim2/IA_Proyecto/blob/master/assets/img/hero-bg.jpg?raw=true") top center;
+  background: url("../img/hero-bg.jpg") top center;
   background-size: cover;
   position: relative;
 }
@@ -510,10 +510,46 @@ section {
   color: #124265;
 }
 
+.section-title h3 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  color: #124265;
+}
+
+.section-title h4 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  color: #000000;
+}
+
+.section-title h5 {
+  font-size: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  color: #000000;
+}
+
 .section-title p {
   margin-bottom: 0;
   font-size: 14px;
   color: #919191;
+}
+
+.section-result {
+  text-align: left;
+  padding-bottom: 0px;
+}
+.section-result h1 {
+  font-size: 17px;
+  color: #000000;
+}
+
+.section-result h2 {
+  font-size: 14px;
+  color: #494646;
 }
 
 /*--------------------------------------------------------------
